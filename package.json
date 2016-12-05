@@ -1,0 +1,8 @@
+{
+  "name": "loan",
+  "version": "0.1.0",
+  "devDependencies": {},
+  "dependencies": {
+    "request": "^2.79.0"
+  }
+}
