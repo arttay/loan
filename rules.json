@@ -1,0 +1,12 @@
+{
+	"critical": {
+		"applicationType": "JOINT",
+		"isIncVJoint": ["VERIFIED", "SOURCE_VERIFIED"]
+	},
+	"secondary": {
+		"numeral": {
+			"annualIncJoint": 100000,
+			"dtiJoint": 15
+		}
+	}
+}
