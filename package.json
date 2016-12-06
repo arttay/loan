@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "devDependencies": {},
   "dependencies": {
+    "mongodb": "^2.2.12",
     "request": "^2.79.0"
   }
 }

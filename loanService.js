@@ -1,5 +1,6 @@
 "use strict";
 const rules = require("./rules")
+const mongoService = require("./services/MongoService");
 
 module.exports = {
 	parseLoan: function (obj) {
@@ -70,7 +71,9 @@ module.exports = {
 								inqLast12m
 
 							*/
-						console.log(loanArr[94140399])
+						//console.log(loanArr[94140399])
+
+						mongoService.connect();
 						}
 					}
 				}
