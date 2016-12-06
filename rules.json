@@ -4,9 +4,89 @@
 		"isIncVJoint": ["VERIFIED", "SOURCE_VERIFIED"]
 	},
 	"secondary": {
-		"numeral": {
-			"annualIncJoint": 100000,
-			"dtiJoint": 15
+		"annualIncJoint": {
+			"type": "greater",
+			"value": 100000
+		}, 
+		"dtiJoint": {
+			"type": "less",
+			"value": 16
+		}, 
+		"purpose": {
+			"type": "match",
+			"value": ["debt_consolidation", "home_improvement"]
+		},
+		"accNowDelinq": {
+			"type": "less",
+			"value": 2
+		},
+		"percentBcGt75": {
+			"type": "less",
+			"value": 50
+		},
+		"dti": {
+			"type": "less",
+			"value": 40
+		},
+		"delinq2Yrs": {
+			"type": "less",
+			"value": 3
+		},
+		"delinqAmnt": {
+			"type": "less",
+			"value": 2
+		},
+		"ficoRangeLow": {
+			"type": "greater",
+			"value": 669
+		},
+		"inqLast6Mths": {
+			"type": "less",
+			"value": 2
+			},
+		"mthsSinceLastDelinq": {
+			"type": "greater",
+			"value": 12
+		},
+		"mortAcc": {
+			"type": "less",
+			"value": 3
+		},
+		"pubRecBankruptcies": {
+			"type": "match",
+			"value": 0
+		}, 
+		"numAcctsEver120Ppd": {
+			"type": "less",
+			"value": 5
+		},
+		"chargeoffWithin12Mths": {
+			"type": "match",
+			"value": 0
+		},
+		"taxLiens": {
+			"type": "match",
+			"value": 0
+		},
+		"numTlOpPast12m": {
+			"type": "less",
+			"value": 4
+		},
+		"numBcTl": {
+			"type": "less",
+			"value": 11
+		},
+		"numActvBcTl": {
+			"type": "less",
+			"value": 5
+		},
+		"pctTlNvrDlq": {
+			"type": "greater",
+			"value": 70
+		},
+		"numTl90gDpd24m": {
+			"type": "less",
+			"value": 1
 		}
 	}
 }

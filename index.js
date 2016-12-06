@@ -7,7 +7,8 @@ const API_KEY = config.apiKey;
 const ACCOUNT_KEY = config.accountKey;
 
 let urls = {
-	listing: 'https://api.lendingclub.com/api/investor/v1/loans/listing?showAll=true'
+	listing: 'https://api.lendingclub.com/api/investor/v1/loans/listing?showAll=true',
+	folio: `https://api.lendingclub.com/api/investor/v1/accounts/${ACCOUNT_KEY}/trades/buy/`
 }
 
 
@@ -21,7 +22,5 @@ let ops = {
 }
 
 request(ops, (err, resp, body) => {
-	
-			service.parseLoan(JSON.parse(body));
-			
+	service.parseLoan(JSON.parse(body));		
 })
