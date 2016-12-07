@@ -8,8 +8,7 @@ module.exports = {
 		let criticals = rules.critical;
 		let secondary = rules.secondary;
 
-		let loanArr = [94140399];
-		
+
 
 		arr.forEach((item) => {
 			let criticalHits = 0;
@@ -23,10 +22,9 @@ module.exports = {
 				} else {
 					if (item[rule] ===  criticals[rule]) criticalHits += 1;
 				}
-				
-				let criticalRulePercent = (criticalHits / criticalRules) * 100;
-
-				if (criticalRulePercent > 80) {
+			}
+			let criticalRulePercent = (criticalHits / criticalRules) * 100;
+			if (criticalRulePercent > 80) {
 					for (var key in secondary) {
 						let type = secondary[key].type;
 						let value = secondary[key].value;
@@ -55,7 +53,9 @@ module.exports = {
 							}
 						}//end match if
 
-						if (secondaryHits >= 19) {
+						
+					}
+					if (secondaryHits >= 19) {
 							/*
 								bcOpenToBuy
 								mthsSinceLastRecord
@@ -71,13 +71,14 @@ module.exports = {
 								inqLast12m
 
 							*/
-						//console.log(loanArr[94140399])
-
-						mongoService.connect();
-						}
+							console.log(item)
+						mongoService.find(item.id).then((status) => {
+							if (!status) {
+								mongoService.insert(item.id)
+							}
+						})
 					}
 				}
-			}
 		});
 	}
 }

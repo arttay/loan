@@ -17,7 +17,8 @@ let ops = {
 	headers: {
 		"Content-type": "application/json",
 		"Accept": "application/json",
-		"Authorization": API_KEY
+		"Authorization": API_KEY,
+		"X-LC-LISTING-VERSION": 1.1
 	}
 }
 
