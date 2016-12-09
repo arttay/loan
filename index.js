@@ -2,6 +2,8 @@
 const request = require('request');
 const config = require("./config");
 const service = require("./loanService");
+const buyService = require("./services/buyService");
+
 
 const API_KEY = config.apiKey;
 const ACCOUNT_KEY = config.accountKey;
@@ -23,5 +25,11 @@ let ops = {
 }
 
 request(ops, (err, resp, body) => {
-	service.parseLoan(JSON.parse(body));		
+
+	service.parseLoan(JSON.parse(body));
+	buyService.getCash().then((data) => {
+		console.log(data)
+	});
+	buyService.buy(94342189);
+
 })
