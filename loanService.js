@@ -24,6 +24,7 @@ module.exports = {
 				}
 			}
 			let criticalRulePercent = (criticalHits / criticalRules) * 100;
+
 			if (criticalRulePercent > 80) {
 					for (var key in secondary) {
 						let type = secondary[key].type;
@@ -55,6 +56,7 @@ module.exports = {
 
 						
 					}
+					console.log(secondaryHits)
 					if (secondaryHits >= 19) {
 							/*
 								bcOpenToBuy
