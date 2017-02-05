@@ -5,18 +5,14 @@ const fs 		= require("fs");
 const csv 		= require('fast-csv');
 const noteService = require("./services/NotesService");
 
-let counter = 0;
-let isReading = false;
+setInterval(function () {
+	//notes are updated every 5 min
+	//Every 5 min, grab the csv and start processing
+	console.log("Starting process")
+  	noteService.getNotes();
+}, 300000)
 
-request
-  .get('https://resources.lendingclub.com/SecondaryMarketAllNotes.csv')
-  .on('error', function(err) {
-    console.log(err)
-  })
-  .on('end', function(response) {
-		noteService.determineGoodLoans();
-  })
-  .pipe(fs.createWriteStream('notes.csv'))
+
 
 
 

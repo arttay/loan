@@ -4,8 +4,21 @@ let ReadSteram 	= require('stream').Readable;
 const csv 		= require('fast-csv');
 const fs 		= require("fs");
 const rules 	= require("../data/notesRules.json").rules;
+const request 	= require('request');
 
 module.exports = {
+	getNotes: function () {
+		request
+		  .get('https://resources.lendingclub.com/SecondaryMarketAllNotes.csv')
+		  .on('error', function(err) {
+		    console.log(err)
+		  })
+		  .on('end', () => {
+		  	this.determineGoodLoans();
+		  })
+		  .pipe(fs.createWriteStream('notes.csv'))
+	},
+
 	determineGoodLoans: function () {
 		this.parseCsv();
 	},
@@ -41,7 +54,10 @@ module.exports = {
 			        	Application_Type: data[20]
 			        }
 			        this.runRules(obj);
-			    });
+			    })
+			    .on("done", () => {
+			    	console.log("This round done")
+			    })
 
 			stream.pipe(csvStream);
 	},
