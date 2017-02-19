@@ -9,6 +9,6 @@
     "request": "^2.79.0"
   },
   "scripts": {
-  	"start": "node notes"
+  	"start": "node --harmony notes index.js"
   }
 }

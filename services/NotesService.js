@@ -1,27 +1,66 @@
 "use strict";
-let Stream 		= require('stream');
-let ReadSteram 	= require('stream').Readable;
-const csv 		= require('fast-csv');
-const fs 		= require("fs");
-const rules 	= require("../data/notesRules.json").rules;
-const request 	= require('request');
+//todo: figure out how to use es6 modules in node
+//http://stackoverflow.com/questions/36901147/es2015-import-not-working-in-node-v6-0-0-with-with-harmony-modules-option
+const csv 			= require('fast-csv');
+const fs 			= require("fs");
+const rules 		= require("../data/notesRules.json").rules;
+const request 		= require('request');
+const StringDecoder = require('string_decoder').StringDecoder;
+const decoder 		= new StringDecoder('utf8');
+const http 			= require("http");
+const url 			= "https://resources.lendingclub.com/SecondaryMarketAllNotes.csv";
+
 
 module.exports = {
 	getNotes: function () {
+
+/*
+		http.get({
+	        host: 'resources.lendingclub.com',
+	        path: '/SecondaryMarketAllNotes.csv'
+	    }, function(response) {
+	        // Continuously update stream with data
+	        var body = '';
+	        console.log(response)
+	        response.on('data', function(data) {
+	           // console.log(decoder.write(data));
+	        });
+
+	        response.on('end', function(data) {
+
+	         
+	        });
+	    });
+	    */
+
+
+		
 		request
 		  .get('https://resources.lendingclub.com/SecondaryMarketAllNotes.csv')
 		  .on('error', function(err) {
 		    console.log(err)
 		  })
+		  .on("data", (data) => {
+		  //	this.readStream(decoder.write(data))
+		  })
 		  .on('end', () => {
+		  	console.log("end")
 		  	this.determineGoodLoans();
 		  })
 		  .pipe(fs.createWriteStream('notes.csv'))
+		  
+		  
 	},
 
 	determineGoodLoans: function () {
 		this.parseCsv();
 	},
+
+	readStream: function (csvString) {
+		console.log(csvString)
+		//console.log("\n" + csvString +"\n")
+	},
+
 
 	parseCsv: function () {
 			let stream  = fs.createReadStream("notes.csv");
@@ -63,7 +102,7 @@ module.exports = {
 	},
 	runRules: function (obj) {
 		if (obj.Application_Type.toLowerCase() === "joint") {
-			if (parseInt(obj.Markup_Discount) < -5) {
+			if (parseInt(obj.Markup_Discount) < -5) { //todo: move this to rules json
 				///todo: run a process after each rule to check if everything is true. This will speed up the program by not having to continue to run process for rule that wont pass.
 				let foo = rules.reduce((prev, item) => {
 					if (Array.isArray(item.value)) if (!this.processArray(item, obj)) prev = false;
