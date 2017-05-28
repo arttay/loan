@@ -8,8 +8,11 @@ const request 		= require('request');
 const StringDecoder = require('string_decoder').StringDecoder;
 const decoder 		= new StringDecoder('utf8');
 const http 			= require("http");
+const config 		= require("../config");
 const url 			= "https://resources.lendingclub.com/SecondaryMarketAllNotes.csv";
 
+const API_KEY		= config.apiKey;
+const ACCOUNT_KEY	= config.accountKey;
 
 module.exports = {
 	getNotes: function () {
@@ -110,11 +113,17 @@ module.exports = {
 					
 					return prev;
 				}, true);
+		
+
 
 				if (foo) {
-					console.log(obj)
+						
+					if (obj.FICO_End_Range.match(/^[7-9][0-9][0-9]+(-[0-9]+)+$/gm) !== null) {
+						console.log(obj)
+						//this.buy(obj);
+					}
+					
 				}
-
 			}
 		}
 	},
@@ -133,7 +142,38 @@ module.exports = {
 			if (rule.type === "match") if (obj[rule.name] === item) prev = true;
 			
 			return prev;
-		}, false);
+		}, false);	
+	},
+	buy: function (data) {
+		let foo = {
+			"aid": parseInt(ACCOUNT_KEY),
+			"notes": [{
+				"loanId": parseInt(data.LoanId),
+				"orderId": parseInt(data.OrderId),
+				"noteId": parseInt(data.NoteId),
+				"bidPrice": parseFloat(data.AskPrice)
+			}]
+		} 
+
+
+		
+		request({
+			url: `https://api.lendingclub.com/api/investor/v1/accounts/${ACCOUNT_KEY}/trades/buy/`,
+			method: "POST",
+			headers: {
+				"Content-type": "application/json",
+				"Accept": "application/json",
+				"Authorization": API_KEY,
+				"X-LC-LISTING-VERSION": 1.1
+			},
+			body: JSON.stringify(foo)
+		}, (err, resp, body) => {
+			console.log({
+				body: body,
+				err: err,
+			})
+		})
+		
 		
 	}
 }
