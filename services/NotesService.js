@@ -2,6 +2,7 @@
 //todo: figure out how to use es6 modules in node
 //http://stackoverflow.com/questions/36901147/es2015-import-not-working-in-node-v6-0-0-with-with-harmony-modules-option
 const csv 			= require('fast-csv');
+const csvParser 	= require('csv-string');
 const fs 			= require("fs");
 const rules 		= require("../data/notesRules.json").rules;
 const request 		= require('request');
@@ -15,44 +16,20 @@ const API_KEY		= config.apiKey;
 const ACCOUNT_KEY	= config.accountKey;
 
 module.exports = {
+	parsedCsvString: "",
 	getNotes: function () {
-
-/*
-		http.get({
-	        host: 'resources.lendingclub.com',
-	        path: '/SecondaryMarketAllNotes.csv'
-	    }, function(response) {
-	        // Continuously update stream with data
-	        var body = '';
-	        console.log(response)
-	        response.on('data', function(data) {
-	           // console.log(decoder.write(data));
-	        });
-
-	        response.on('end', function(data) {
-
-	         
-	        });
-	    });
-	    */
-
-
-		
 		request
 		  .get('https://resources.lendingclub.com/SecondaryMarketAllNotes.csv')
 		  .on('error', function(err) {
 		    console.log(err)
 		  })
 		  .on("data", (data) => {
-		  //	this.readStream(decoder.write(data))
+		  	this.readStream(decoder.write(data))
 		  })
 		  .on('end', () => {
 		  	console.log("end")
-		  	this.determineGoodLoans();
 		  })
 		  .pipe(fs.createWriteStream('notes.csv'))
-		  
-		  
 	},
 
 	determineGoodLoans: function () {
@@ -60,49 +37,57 @@ module.exports = {
 	},
 
 	readStream: function (csvString) {
-		console.log(csvString)
-		//console.log("\n" + csvString +"\n")
+		let reg = /\n$/;
+
+		/*
+			Sometimes the csv string ends in the middle of the string
+			We check for an end of line(which should be an end of csv string)
+			We keep building the string until we get to an end of line from
+			the string.
+
+
+		*/
+
+		if (!reg.test(csvString)) {
+			this.setCsvString(csvString);
+		} else {
+			this.setCsvString(csvString);
+			let foo = this.getCsvString();
+			this.parseCsv(foo)
+			this.clearCsvString();
+		}
 	},
 
-
-	parseCsv: function () {
-			let stream  = fs.createReadStream("notes.csv");
-			let dataArr = [];
-			let self = this;
-
-			let csvStream = csv()
-			    .on("data", (data) => {
-			        let obj = {
-			        	LoanId: data[0],
-			        	NoteId: data[1],
-			        	OrderId: data[2],
-			        	OutstandingPrincipal: data[3],
-			        	AccruedInterest: data[4],
-			        	Status: data[5],
-			        	AskPrice: data[6],
-			        	Markup_Discount: data[7],
-			        	YTM: data[8],
-			        	DaysSinceLastPayment: data[9],
-			        	CreditScoreTrend: data[10],
-			        	FICO_End_Range: data[11],
-			        	Date_Time_Listed: data[12],
-			        	NeverLate: data[13],
-			        	Loan_Class: data[14],
-			        	Loan_Maturity: data[15],
-			        	Original_Note_Amount: data[16],
-			        	Interest_Rate: data[17],
-			        	Remaining_Payments: data[18],
-			        	Principal_plus_Interest: data[19],
-			        	Application_Type: data[20]
-			        }
-			        this.runRules(obj);
-			    })
-			    .on("done", () => {
-			    	console.log("This round done")
-			    })
-
-			stream.pipe(csvStream);
+	parseCsv: function (csvString) {
+		let foo = csvParser.parse(csvString);
+		foo.forEach((data) => {
+			let obj = {
+			    LoanId: data[0],
+			    NoteId: data[1],
+			    OrderId: data[2],
+			    OutstandingPrincipal: data[3],
+			    AccruedInterest: data[4],
+			    Status: data[5],
+			    AskPrice: data[6],
+			    Markup_Discount: data[7],
+			    YTM: data[8],
+			    DaysSinceLastPayment: data[9],
+			    CreditScoreTrend: data[10],
+			    FICO_End_Range: data[11],
+			    Date_Time_Listed: data[12],
+			    NeverLate: data[13],
+			    Loan_Class: data[14],
+			    Loan_Maturity: data[15],
+			    Original_Note_Amount: data[16],
+			    Interest_Rate: data[17],
+			    Remaining_Payments: data[18],
+			    Principal_plus_Interest: data[19],
+			    Application_Type: data[20]
+			}
+			this.runRules(obj);
+		});
 	},
+
 	runRules: function (obj) {
 		if (obj.Application_Type.toLowerCase() === "joint") {
 			if (parseInt(obj.Markup_Discount) < -5) { //todo: move this to rules json
@@ -114,15 +99,12 @@ module.exports = {
 					return prev;
 				}, true);
 		
-
-
+			console.log(obj);
 				if (foo) {
-						
 					if (obj.FICO_End_Range.match(/^[7-9][0-9][0-9]+(-[0-9]+)+$/gm) !== null) {
 						console.log(obj)
 						//this.buy(obj);
 					}
-					
 				}
 			}
 		}
@@ -175,5 +157,16 @@ module.exports = {
 		})
 		
 		
+	},
+	getCsvString: function () {
+		return this.parsedCsvString;
+	},
+
+	setCsvString: function (newString) {
+		this.parsedCsvString += newString;
+	},
+
+	clearCsvString: function () {
+		this.parsedCsvString = "";
 	}
 }
