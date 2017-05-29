@@ -6,9 +6,10 @@
     "csv": "^1.1.1",
     "fast-csv": "^2.3.1",
     "mongodb": "^2.2.12",
-    "request": "^2.79.0"
+    "request": "^2.79.0",
+    "yargs": "^8.0.1"
   },
   "scripts": {
-  	"start": "node --harmony notes index.js"
+    "start": "node --harmony notes index.js"
   }
 }

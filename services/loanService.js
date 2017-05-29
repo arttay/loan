@@ -1,6 +1,6 @@
 "use strict";
-const rules = require("./rules")
-const mongoService = require("./services/MongoService");
+const rules = require("../data/loanRules")
+const mongoService = require("./MongoService");
 
 module.exports = {
 	parseLoan: function (obj) {
@@ -57,8 +57,8 @@ module.exports = {
 
 					
 					}
-					console.log(item)
-					console.log("\n")
+				//	console.log(item)
+				//	console.log("\n")
 					if (secondaryHits >= 19) {
 							/*
 								bcOpenToBuy
