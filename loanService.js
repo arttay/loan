@@ -57,7 +57,8 @@ module.exports = {
 
 					
 					}
-					console.log(secondaryHits)
+					console.log(item)
+					console.log("\n")
 					if (secondaryHits >= 19) {
 							/*
 								bcOpenToBuy
