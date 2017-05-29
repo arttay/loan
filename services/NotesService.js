@@ -29,7 +29,6 @@ module.exports = {
 		  .on('end', () => {
 		  	console.log("end")
 		  })
-		  .pipe(fs.createWriteStream('notes.csv'))
 	},
 
 	determineGoodLoans: function () {
@@ -44,8 +43,6 @@ module.exports = {
 			We check for an end of line(which should be an end of csv string)
 			We keep building the string until we get to an end of line from
 			the string.
-
-
 		*/
 
 		if (!reg.test(csvString)) {

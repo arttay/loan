@@ -1,48 +1,61 @@
-/*
 "use strict";
 const request = require('request');
-const config = require("./config");
-const service = require("./services/loanService");
-const buyService = require("./services/buyService");
-
+const config = require("../config");
+const service = require("../services/loanService");
+const buyService = require("../services/buyService");
 
 const API_KEY = config.apiKey;
 const ACCOUNT_KEY = config.accountKey;
 
-let urls = {
-	listing: 'https://api.lendingclub.com/api/investor/v1/loans/listing?showAll=true',
-	folio: `https://api.lendingclub.com/api/investor/v1/accounts/${ACCOUNT_KEY}/trades/buy/`
+let loanService = function () {};
+
+loanService.prototype.startLoans = function () {
+	let ops = getOps();
+	request(ops, (err, resp, body) => {
+		service.parseLoan(JSON.parse(body));
+		
+		/*
+		buyService.getCash().then((data) => {
+			console.log(data)
+		});
+		buyService.buy(94342189);
+		*/
+	});
 }
 
-
-let ops = {
-	url: urls.listing,
-	headers: {
-		"Content-type": "application/json",
-		"Accept": "application/json",
-		"Authorization": API_KEY,
-		"X-LC-LISTING-VERSION": 1.1
+function getLoanUrls () {
+	return {
+		listing: 'https://api.lendingclub.com/api/investor/v1/loans/listing?showAll=true',
+		folio: `https://api.lendingclub.com/api/investor/v1/accounts/${ACCOUNT_KEY}/trades/buy/`
 	}
 }
 
-request(ops, (err, resp, body) => {
-
-	service.parseLoan(JSON.parse(body));
-	
-	/*
-	buyService.getCash().then((data) => {
-		console.log(data)
-	});
-	buyService.buy(94342189);
-	
-
-})
-*/
-
-module.exports = function () {
+function getOps () {
 	return {
-		test: function () {
-			console.log("test")
+		url: getLoanUrls().listing,
+		headers: {
+			"Content-type": "application/json",
+			"Accept": "application/json",
+			"Authorization": API_KEY,
+			"X-LC-LISTING-VERSION": 1.1
 		}
 	}
-}()
+}
+
+module.exports = new loanService();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
