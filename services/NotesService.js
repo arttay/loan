@@ -99,8 +99,9 @@ module.exports = {
 					return prev;
 				}, true);
 		
-			console.log(obj);
+			//console.log(obj);
 				if (foo) {
+					//only look for loans where the owner has a credit scroe of >700
 					if (obj.FICO_End_Range.match(/^[7-9][0-9][0-9]+(-[0-9]+)+$/gm) !== null) {
 						console.log(obj)
 						//this.buy(obj);

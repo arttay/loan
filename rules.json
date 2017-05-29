@@ -4,89 +4,138 @@
 		"isIncVJoint": ["VERIFIED", "SOURCE_VERIFIED"]
 	},
 	"secondary": {
+		"expDefaultRate": {
+			"type": "less",
+			"value": 7,
+			"_commonName": "",
+			"_meaning": "The expected default rate of the loan."
+		},
+
 		"annualIncJoint": {
 			"type": "greater",
-			"value": 100000
+			"value": 100000,
+			"_commonName": "joint annual income",
+			"_meaning": "The joint annual income if the applicationType is 'Joint'."
 		}, 
 		"dtiJoint": {
-			"type": "less",
-			"value": 16
+			"type": "less",  
+			"value": 16,
+			"_commonName": "joint debt to joint income ratio",
+			"_meaning": "The joint debt to joint income ratio. This field is populated if the applicationType is 'Joint'. Calculated using the monthly payments on the total debt obligations, excluding mortgage, divided by self-reported monthly income."
 		}, 
 		"purpose": {
 			"type": "match",
-			"value": ["debt_consolidation", "home_improvement"]
+			"value": ["debt_consolidation", "home_improvement"],
+			"_commonName": "purpose",
+			"_meaning": "A category provided by the borrower for the loan request. Values are: debt_consolidation, medical, home_improvement, renewable_energy, small_business, wedding, vacation, moving, house, car, major_purchase, credit_card, other"
 		},
 		"accNowDelinq": {
 			"type": "less",
-			"value": 2
+			"value": 2,
+			"_commonName": "",
+			"_meaning": "The Number of accounts on which the borrower is now delinquent."
 		},
 		"percentBcGt75": {
 			"type": "less",
-			"value": 50
+			"value": 50,
+			"_commonName": "",
+			"_meaning": "Percentage of all bankcard accounts > 75% of limit."
 		},
 		"dti": {
 			"type": "less",
-			"value": 40
+			"value": 40,
+			"_commonName": "debt to income ratio",
+			"_meaning": "The borrower's debt to income ratio, calculated using the monthly payments on the total debt obligations, excluding mortgage, divided by self-reported monthly income."
 		},
 		"delinq2Yrs": {
 			"type": "less",
-			"value": 3
+			"value": 3,
+			"_commonName": "",
+			"_meaning": "The Number of 30+ days past-due incidences of delinquency in the borrower's credit file for the past 2 years."
 		},
 		"delinqAmnt": {
 			"type": "less",
-			"value": 2
+			"value": 2,
+			"_commonName": "",
+			"_meaning": "The past-due amount owed for the accounts on which the borrower is now delinquent."
 		},
 		"ficoRangeLow": {
 			"type": "greater",
-			"value": 669
+			"value": 669,
+			"_commonName": "",
+			"_meaning": "The lower boundary of range the borrower's FICO belongs to."
 		},
 		"inqLast6Mths": {
 			"type": "less",
-			"value": 2
+			"value": 2,
+			"_commonName": "",
+			"_meaning": "The Number of inquiries by creditors during the past 6 months."
 			},
 		"mthsSinceLastDelinq": {
 			"type": "greater",
-			"value": 12
+			"value": 12,
+			"_commonName": "",
+			"_meaning": "The Number of months since the borrower's last delinquency."
 		},
 		"mortAcc": {
 			"type": "less",
-			"value": 3
+			"value": 3,
+			"_commonName": "",
+			"_meaning": "Number of mortgage accounts."
 		},
 		"pubRecBankruptcies": {
 			"type": "match",
-			"value": 0
+			"value": 0,
+			"_commonName": "",
+			"_meaning": "Number of public record bankruptcies."
 		}, 
 		"numAcctsEver120Ppd": {
 			"type": "less",
-			"value": 5
+			"value": 5,
+			"_commonName": "",
+			"_meaning": "Number of accounts ever 120 or more days past due."
 		},
 		"chargeoffWithin12Mths": {
 			"type": "match",
-			"value": 0
+			"value": 0,
+			"_commonName": "",
+			"_meaning": "Number of charge-offs within 12 months."
 		},
 		"taxLiens": {
 			"type": "match",
-			"value": 0
+			"value": 0,
+			"_commonName": "",
+			"_meaning": "Number of tax liens"
 		},
 		"numTlOpPast12m": {
 			"type": "less",
-			"value": 4
+			"value": 4,
+			"_commonName": "",
+			"_meaning": "Number of accounts opened in past 12 months"
 		},
 		"numBcTl": {
 			"type": "less",
-			"value": 11
+			"value": 11,
+			"_commonName": "",
+			"_meaning": "Number of bankcard accounts"
 		},
 		"numActvBcTl": {
 			"type": "less",
-			"value": 5
+			"value": 5,
+			"_commonName": "",
+			"_meaning": "Number of currently active bankcard accounts"
 		},
 		"pctTlNvrDlq": {
 			"type": "greater",
-			"value": 70
+			"value": 70,
+			"_commonName": "",
+			"_meaning": "Percent of trades never delinquent"
 		},
 		"numTl90gDpd24m": {
 			"type": "less",
-			"value": 1
+			"value": 1,
+			"_commonName": "",
+			"_meaning": "Number of accounts 90 or more days past due in last 24 months"
 		}
 	}
 }
