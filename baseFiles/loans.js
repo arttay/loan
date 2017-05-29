@@ -1,24 +1,9 @@
-"use strict";
 /*
+"use strict";
 const request = require('request');
 const config = require("./config");
 const service = require("./services/loanService");
 const buyService = require("./services/buyService");
-*/
-const loans = require("./baseFiles/loans");
-const argv = require('yargs').argv;
-
-
-if (argv.type === "loans") {
-	loans.test();
-} else if (argv.type === "notes") {
-	console.log("notes");
-} else {
-
-}
-
-
-/*
 
 
 const API_KEY = config.apiKey;
@@ -49,7 +34,15 @@ request(ops, (err, resp, body) => {
 		console.log(data)
 	});
 	buyService.buy(94342189);
-	*
+	
 
 })
 */
+
+module.exports = function () {
+	return {
+		test: function () {
+			console.log("test")
+		}
+	}
+}()
