@@ -7,10 +7,13 @@ module.exports = {
 	getLoans: function (ops) {
 		return new Promise((resolve, reject) => {
 			request(ops, (err, resp, body) => {
-				this.parseLoan(JSON.parse(body)).then(() => {
-					console.log("done")
-					resolve();
-				})
+				if (body !== "" && body !== "Internal Server Error") {
+					this.parseLoan(JSON.parse(body)).then(() => {
+						console.log("done")
+						resolve();
+					});
+				}
+
 			});
 		});
 	},
@@ -36,7 +39,6 @@ module.exports = {
 					}
 				}
 				let criticalRulePercent = (criticalHits / criticalRules) * 100;
-
 
 				if (criticalRulePercent > 80) {
 						for (var key in secondary) {
@@ -66,26 +68,25 @@ module.exports = {
 									}
 								}
 							}//end match if
-
-						
 						}
 						//console.log(item)
 						//console.log("\n")
 						if (secondaryHits >= 19) {
 								/*
-									bcOpenToBuy
-									mthsSinceLastRecord
-									mthsSinceRecentInq
-									totalBalExMort
-									mthsSinceRecentBcDlq
-									totHiCredLim
-									totCurBal
-									avgCurBal
-									numBcSats
-									numTl120dpd2m
-									inqFi
-									inqLast12m
+								Stuff to still create rules for
 
+									bcOpenToBuy: 			Total open to buy on revolving bankcards.
+									mthsSinceLastRecord: 	The Number of months since the last public record.
+									mthsSinceRecentInq: 	Months since most recent inquiry.
+									totalBalExMort: 		Total credit balance excluding mortgage.
+									mthsSinceRecentBcDlq: 	Months since most recent bankcard delinquency.
+									totHiCredLim: 			Total high credit/credit limit
+									totCurBal: 				Total current balance of all accounts
+									avgCurBal: 				Average current balance of all accounts
+									numBcSats: 				Number of satisfactory bankcard accounts
+									numTl120dpd2m: 			Number of accounts currently 120 days past due (updated in past 2 months)
+									inqFi: 					Number of personal finance inquiries.
+									inqLast12m: 			Number of credit inquiries in past 12 months.
 								*/
 								console.log(item)
 							mongoService.find(item.id).then((status) => {
@@ -97,6 +98,7 @@ module.exports = {
 				}
 
 				if (key === len-1) {
+					//if its the last item in the array, resolve the promise, end it.
 					resolve();
 				}
 			});
