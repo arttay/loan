@@ -10,16 +10,10 @@ const ACCOUNT_KEY = config.accountKey;
 let loanService = function () {};
 
 loanService.prototype.startLoans = function () {
+	console.log("start")
 	let ops = getOps();
-	request(ops, (err, resp, body) => {
-		service.parseLoan(JSON.parse(body));
-		
-		/*
-		buyService.getCash().then((data) => {
-			console.log(data)
-		});
-		buyService.buy(94342189);
-		*/
+	service.getLoans(ops).then(() => {
+		this.startLoans();
 	});
 }
 
