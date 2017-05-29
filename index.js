@@ -1,7 +1,7 @@
 "use strict";
 const request = require('request');
 const config = require("./config");
-const service = require("./loanService");
+const service = require("./services/loanService");
 const buyService = require("./services/buyService");
 
 
@@ -12,7 +12,7 @@ let urls = {
 	listing: 'https://api.lendingclub.com/api/investor/v1/loans/listing?showAll=true',
 	folio: `https://api.lendingclub.com/api/investor/v1/accounts/${ACCOUNT_KEY}/trades/buy/`
 }
-//https://resources.lendingclub.com/SecondaryMarketAllNotes.csv
+
 
 let ops = {
 	url: urls.listing,
