@@ -8,5 +8,5 @@ if (argv.type === "loans") {
 } else if (argv.type === "notes") {
 	notes.startNotes();
 } else {
-
+	loans.startLoans();
 }

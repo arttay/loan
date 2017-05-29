@@ -18,17 +18,21 @@ const ACCOUNT_KEY	= config.accountKey;
 module.exports = {
 	parsedCsvString: "",
 	getNotes: function () {
-		request
-		  .get('https://resources.lendingclub.com/SecondaryMarketAllNotes.csv')
-		  .on('error', function(err) {
-		    console.log(err)
-		  })
-		  .on("data", (data) => {
-		  	this.readStream(decoder.write(data))
-		  })
-		  .on('end', () => {
-		  	console.log("end")
-		  })
+		return new Promise((resolve, reject) => {
+			console.log("start")
+			request
+			  .get('https://resources.lendingclub.com/SecondaryMarketAllNotes.csv')
+			  .on('error', function(err) {
+			    console.log(err)
+			  })
+			  .on("data", (data) => {
+			  	this.readStream(decoder.write(data))
+			  })
+			  .on('end', () => {
+			  	console.log("end");
+			  	resolve();
+			  })
+		});
 	},
 
 	determineGoodLoans: function () {
