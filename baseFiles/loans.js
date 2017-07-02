@@ -13,7 +13,7 @@ loanService.prototype.startLoans = function () {
 	console.log("start")
 	let ops = getOps();
 	service.getLoans(ops).then(() => {
-		this.startLoans();
+	//	this.startLoans();
 	});
 }
 

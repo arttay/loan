@@ -4,6 +4,7 @@
 const csv 			= require('fast-csv');
 const csvParser 	= require('csv-string');
 const fs 			= require("fs");
+const mongoService 	= require("./MongoService");
 const rules 		= require("../data/notesRules.json").rules;
 const request 		= require('request');
 const StringDecoder = require('string_decoder').StringDecoder;
@@ -102,9 +103,11 @@ module.exports = {
 		
 			//console.log(obj);
 				if (foo) {
+					//console.log(obj)
 					//only look for loans where the owner has a credit scroe of >700
-					if (obj.FICO_End_Range.match(/^[7-9][0-9][0-9]+(-[0-9]+)+$/gm) !== null) {
-						console.log(obj)
+					if (obj.FICO_End_Range.match(/^[6-9][7-9][0-9]+(-[0-9]+)+$/gm) !== null) {
+						//console.log(obj)
+						this.logNote(obj)
 						//this.buy(obj);
 					}
 				}
@@ -170,5 +173,24 @@ module.exports = {
 
 	clearCsvString: function () {
 		this.parsedCsvString = "";
+	},
+
+	logNote: function (obj) {
+		let loanId = obj.LoanId;
+		mongoService.findNote(loanId).then((data) => {
+			console.log(data)
+			data ? this.increaseCount(obj) : this.insertNewNote(obj);
+		})
+	},
+	increaseCount: function (obj) {
+		mongoService.getData(obj.LoanId).then((data) => {
+			data.count++;
+			mongoService.updateNote(data, data.LoanId);
+		})
+	},
+
+	insertNewNote: function (obj) {
+		obj.count = 1;
+		mongoService.insertNote(obj)
 	}
 }
