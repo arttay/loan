@@ -28,7 +28,7 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			arr.forEach((item, key, index) => {
 				let criticalHits = 0;
-				let criticalRules = 3;
+				let criticalRules = 4;
 				let secondaryHits = 0;
 				let secondaryRules = 6;
 				
@@ -36,12 +36,25 @@ module.exports = {
 					if (Array.isArray(criticals[rule])) {
 						criticals[rule].forEach((ruleItem) => { if (item[rule] === ruleItem) criticalHits += 1; })
 					} else {
-						if (item[rule] ===  criticals[rule]) criticalHits += 1;
+						if (criticals[rule].hasOwnProperty("values")) {
+							let dep = criticals[rule].dep;
+							let depValue = criticals[rule].depValue;
+							let depValues = criticals[rule].values
+
+							if (item[dep] === depValue) {
+								depValues.forEach(ruleItem => {
+									if (ruleItem === item[rule]) criticalHits += 1;
+								})
+							}
+						} else {
+							if (item[rule] ===  criticals[rule]) criticalHits += 1;
+						}
 					}
 				}
 				let criticalRulePercent = (criticalHits / criticalRules) * 100;
 
-				if (criticalRulePercent === 100) {
+				if (criticalRulePercent >= 75) {
+
 						for (var key in secondary) {
 							let type = secondary[key].type;
 							let value = secondary[key].value;
@@ -70,8 +83,6 @@ module.exports = {
 								}
 							}//end match if
 						}
-						//console.log(item)
-						//console.log("\n")
 						if (secondaryHits >= 19) {
 								/*
 								Stuff to still create rules for
@@ -89,7 +100,7 @@ module.exports = {
 									inqFi: 					Number of personal finance inquiries.
 									inqLast12m: 			Number of credit inquiries in past 12 months.
 								*/
-								//console.log(item)
+								console.log(item)
 							mongoService.find(item.id).then((status) => {
 								if (!status) {
 									mongoService.insert(item.id)
@@ -102,6 +113,7 @@ module.exports = {
 					//if its the last item in the array, resolve the promise, end it.
 					resolve();
 				}
+				
 			});
 		})
 

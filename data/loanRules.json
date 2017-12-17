@@ -1,8 +1,17 @@
 {
 	"critical": {
-		"applicationType": "JOINT",
+		"applicationType": ["JOINT", "INDIVIDUAL"],
 		"delinq2Yrs": 0,
-		"isIncVJoint": ["VERIFIED", "SOURCE_VERIFIED"]
+		"isIncVJoint": {
+			"dep": "applicationType",
+			"depValue": "JOINT",
+			"values": ["VERIFIED", "SOURCE_VERIFIED"]
+		},
+		"isIncV": {
+			"dep": "applicationType",
+			"depValue": "INDIVIDUAL",
+			"values": ["VERIFIED", "SOURCE_VERIFIED"]
+		}
 	},
 	"secondary": {
 		"expDefaultRate": {
