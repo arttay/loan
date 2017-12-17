@@ -1,7 +1,7 @@
 "use strict";
-const loans = require("./baseFiles/loans");
-const notes = require("./baseFiles/notes");
-const argv = require('yargs').argv;
+const loans       = require("./baseFiles/loans");
+const notes       = require("./baseFiles/notes");
+const argv        = require('yargs').argv;
 const cluster 		= require('cluster');
 const numCPUs 		= require('os').cpus().length;
 

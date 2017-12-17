@@ -89,7 +89,6 @@ module.exports = {
 			this.runRules(obj);
 		});
 	},
-
 	runRules: function (obj) {
 		if (obj.Application_Type.toLowerCase() === "joint") {
 			if (parseInt(obj.Markup_Discount) < -5) { //todo: move this to rules json
@@ -141,8 +140,6 @@ module.exports = {
 				"bidPrice": parseFloat(data.AskPrice)
 			}]
 		} 
-
-
 		
 		request({
 			url: `https://api.lendingclub.com/api/investor/v1/accounts/${ACCOUNT_KEY}/trades/buy/`,

@@ -49,7 +49,6 @@ module.exports = {
 	},
 
 	updateNote: function (obj, loadId) {
-		console.log(obj)
 		var url = `mongodb://${DB_USER}:${DB_PASS}@${DB_URL}:${DB_PORT}/loan_parser_notes`;
 		return new Promise((resolve, reject) => {
 			// Use connect method to connect to the Server 

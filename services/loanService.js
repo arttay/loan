@@ -7,11 +7,12 @@ module.exports = {
 	getLoans: function (ops) {
 		return new Promise((resolve, reject) => {
 			request(ops, (err, resp, body) => {
-				if (body !== "" && body !== "Internal Server Error") {
+				if (body !== "" && body !== "Internal Server Error" && body !== "Too Many Requests") {
 					this.parseLoan(JSON.parse(body)).then(() => {
 						console.log("done")
 						resolve();
 					});
+				
 				}
 
 			});
@@ -27,7 +28,7 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			arr.forEach((item, key, index) => {
 				let criticalHits = 0;
-				let criticalRules = 2;
+				let criticalRules = 3;
 				let secondaryHits = 0;
 				let secondaryRules = 6;
 				
@@ -40,7 +41,7 @@ module.exports = {
 				}
 				let criticalRulePercent = (criticalHits / criticalRules) * 100;
 
-				if (criticalRulePercent > 80) {
+				if (criticalRulePercent === 100) {
 						for (var key in secondary) {
 							let type = secondary[key].type;
 							let value = secondary[key].value;
@@ -88,7 +89,7 @@ module.exports = {
 									inqFi: 					Number of personal finance inquiries.
 									inqLast12m: 			Number of credit inquiries in past 12 months.
 								*/
-								console.log(item)
+								//console.log(item)
 							mongoService.find(item.id).then((status) => {
 								if (!status) {
 									mongoService.insert(item.id)

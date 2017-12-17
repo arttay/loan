@@ -1,6 +1,7 @@
 {
 	"critical": {
 		"applicationType": "JOINT",
+		"delinq2Yrs": 0,
 		"isIncVJoint": ["VERIFIED", "SOURCE_VERIFIED"]
 	},
 	"secondary": {
