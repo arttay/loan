@@ -83,7 +83,9 @@ module.exports = {
 								}
 							}//end match if
 						}
-						if (secondaryHits >= 19) {
+					//	console.log(secondaryHits)
+						//22 rules at the moment 
+						if (secondaryHits >= 20) {
 								/*
 								Stuff to still create rules for
 
@@ -100,7 +102,7 @@ module.exports = {
 									inqFi: 					Number of personal finance inquiries.
 									inqLast12m: 			Number of credit inquiries in past 12 months.
 								*/
-								console.log(item)
+							console.log(item)
 							mongoService.find(item.id).then((status) => {
 								if (!status) {
 									mongoService.insert(item.id)

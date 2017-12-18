@@ -20,7 +20,14 @@
 			"_commonName": "",
 			"_meaning": "The expected default rate of the loan."
 		},
-
+		"term": {
+			"type": "match",
+			"value": 36
+		},
+		"empLength": {
+			"type": "greater",
+			"value": 10
+		},
 		"annualIncJoint": {
 			"type": "greater",
 			"value": 100000,
@@ -53,15 +60,9 @@
 		},
 		"dti": {
 			"type": "less",
-			"value": 40,
+			"value": 20,
 			"_commonName": "debt to income ratio",
 			"_meaning": "The borrower's debt to income ratio, calculated using the monthly payments on the total debt obligations, excluding mortgage, divided by self-reported monthly income."
-		},
-		"delinq2Yrs": {
-			"type": "less",
-			"value": 3,
-			"_commonName": "",
-			"_meaning": "The Number of 30+ days past-due incidences of delinquency in the borrower's credit file for the past 2 years."
 		},
 		"delinqAmnt": {
 			"type": "less",
@@ -137,7 +138,7 @@
 		},
 		"pctTlNvrDlq": {
 			"type": "greater",
-			"value": 70,
+			"value": 90,
 			"_commonName": "",
 			"_meaning": "Percent of trades never delinquent"
 		},
