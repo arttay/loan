@@ -56,6 +56,7 @@ module.exports = {
 				
 				var collection = db.collection('notes');
 				collection.update({"LoanId": loadId}, obj, (err, count, obj) => {
+					console.log(err)
 				})
 
 			  db.close();

@@ -175,13 +175,13 @@ module.exports = {
 	logNote: function (obj) {
 		let loanId = obj.LoanId;
 		mongoService.findNote(loanId).then((data) => {
-			console.log(data)
 			data ? this.increaseCount(obj) : this.insertNewNote(obj);
 		})
 	},
 	increaseCount: function (obj) {
 		mongoService.getData(obj.LoanId).then((data) => {
 			data.count++;
+			console.log(data.LoanId)
 			mongoService.updateNote(data, data.LoanId);
 		})
 	},

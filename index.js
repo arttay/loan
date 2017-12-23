@@ -6,6 +6,16 @@ const cluster 		= require('cluster');
 const numCPUs 		= require('os').cpus().length;
 
 
+  if (argv.type === "loans") {
+    loans.startLoans();
+  } else if (argv.type === "notes") {
+    notes.startNotes();
+  } else {
+    loans.startLoans();
+  }
+
+
+/*
 if (cluster.isMaster) {
   console.log(`Master ${process.pid} is running`);
 
@@ -42,3 +52,4 @@ if (cluster.isMaster) {
 		loans.startLoans();
 	}
 }
+*/

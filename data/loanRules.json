@@ -1,13 +1,21 @@
 {
 	"critical": {
-		"applicationType": ["JOINT", "INDIVIDUAL"],
-		"delinq2Yrs": 0,
+		"applicationType": {
+			"type": "match",
+			"value": ["JOINT", "INDIVIDUAL"]
+		},
+		"delinq2Yrs": {
+			"type": "match",
+			"value": 0
+		},
 		"isIncVJoint": {
+			"type": "depMatch",
 			"dep": "applicationType",
 			"depValue": "JOINT",
 			"values": ["VERIFIED", "SOURCE_VERIFIED"]
 		},
 		"isIncV": {
+			"type": "depMatch",
 			"dep": "applicationType",
 			"depValue": "INDIVIDUAL",
 			"values": ["VERIFIED", "SOURCE_VERIFIED"]

@@ -24,14 +24,44 @@ module.exports = {
 		let len = arr.length;
 		let criticals = rules.critical;
 		let secondary = rules.secondary;
+		let numOfCritRules = Object.keys(criticals).length;
+		let numOfSecondRules = Object.keys(secondary).length;
 
 		return new Promise((resolve, reject) => {
+			
+			let criticalFilteredLoans = arr.reduce((prev, item) => {
+				let rulesPassed = 0;
+				for (let rule in criticals) {
+					if (runRules(item, criticals[rule], rule)) rulesPassed++;
+				}
+				if (rulesPassed === (numOfCritRules - 1)) prev.push(item)
+				return prev;
+			}, []);
+
+
+			let furtherFilteredLoans = criticalFilteredLoans.reduce((prev, item) => {
+				let rulesPassed = 0;
+
+				for (let rule in secondary) {
+					if (runRules(item, secondary[rule], rule)) rulesPassed++;
+				}
+
+				if (rulesPassed >= (numOfSecondRules - 2)) prev.push(item)
+
+				return prev;
+			}, []);
+
+			console.log(furtherFilteredLoans)
+
+			/*
 			arr.forEach((item, key, index) => {
 				let criticalHits = 0;
 				let criticalRules = 4;
 				let secondaryHits = 0;
 				let secondaryRules = 6;
 				
+
+
 				for (let rule in criticals) {
 					if (Array.isArray(criticals[rule])) {
 						criticals[rule].forEach((ruleItem) => { if (item[rule] === ruleItem) criticalHits += 1; })
@@ -51,6 +81,7 @@ module.exports = {
 						}
 					}
 				}
+
 				let criticalRulePercent = (criticalHits / criticalRules) * 100;
 
 				if (criticalRulePercent >= 75) {
@@ -101,7 +132,7 @@ module.exports = {
 									numTl120dpd2m: 			Number of accounts currently 120 days past due (updated in past 2 months)
 									inqFi: 					Number of personal finance inquiries.
 									inqLast12m: 			Number of credit inquiries in past 12 months.
-								*/
+								*
 							console.log(item)
 							mongoService.find(item.id).then((status) => {
 								if (!status) {
@@ -117,7 +148,84 @@ module.exports = {
 				}
 				
 			});
+			*/
 		})
 
 	}
+}
+
+function runRules (item, rule, prop) {
+	let positiveCount = 0;
+	let returnValue = false;
+
+	if (rule.type === "depMatch") {
+		if (runDepMatch(item, rule, prop)) returnValue = true;
+	}
+
+	if (rule.type === "match") {
+		if (runMatch(item, rule, prop)) returnValue = true;
+	}
+
+	if (rule.type === "less") {
+		if (runLess(item, rule, prop)) returnValue = true;
+	}
+
+	if (rule.type === "greater") {
+		if (runGreater(item, rule, prop)) returnValue = true;
+	}
+
+	return returnValue;
+}
+
+function runMatch (item, rule, prop) {
+	let returnValue = false;
+	let value = rule.value;
+
+	if (Array.isArray(value)) {
+		returnValue = value.reduce((prev, v) => {
+			if (item[prop] === v) prev = true;
+			return prev;
+		}, false);
+
+	} else {
+		if (item[prop] === value) returnValue = true;
+	}
+
+	return returnValue;
+}
+
+function runDepMatch (item, rule, prop) {
+	let dep = rule.dep;
+	let depValue = rule.depValue;
+	let values = rule.values;
+	let returnValue = false;
+
+	if (item[dep] === depValue) {
+		if (Array.isArray(values)) {
+			returnValue = values.reduce((prev, value) => {
+				if (item[prop] === value) prev = true;
+				return prev;
+			}, false);
+		}
+	}
+
+	return returnValue;
+}
+
+function runLess (item, rule, prop) {
+	let returnValue = false;
+	let value = rule.value;
+
+	if (item[prop] < value) returnValue = true;
+
+	return returnValue;
+}
+
+function runGreater (item, rule, prop) {
+	let returnValue = false;
+	let value = rule.value;
+
+	if (item[prop] > value) returnValue = true;
+
+	return returnValue;
 }
