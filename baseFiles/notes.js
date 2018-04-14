@@ -7,10 +7,14 @@ const noteService 	= require("../services/NotesService");
 let notes = function () {};
 
 notes.prototype.startNotes = function () {
+
+	//this.startNotes();
+	
 	noteService.getNotes().then(() => {
 		//restart parsing notes once the previous loop ends
-		this.startNotes();
+		//this.startNotes();
 	});
+
 }
 
 

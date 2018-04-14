@@ -19,7 +19,18 @@
 			"dep": "applicationType",
 			"depValue": "INDIVIDUAL",
 			"values": ["VERIFIED", "SOURCE_VERIFIED"]
+		},
+		"ficoRangeLow": {
+			"type": "greater",
+			"value": 699,
+			"_commonName": "",
+			"_meaning": "The lower boundary of range the borrower's FICO belongs to."
+		},
+		"intRate": {
+			"type": "greater",
+			"value": 9.75
 		}
+
 	},
 	"secondary": {
 		"expDefaultRate": {
@@ -77,12 +88,6 @@
 			"value": 2,
 			"_commonName": "",
 			"_meaning": "The past-due amount owed for the accounts on which the borrower is now delinquent."
-		},
-		"ficoRangeLow": {
-			"type": "greater",
-			"value": 669,
-			"_commonName": "",
-			"_meaning": "The lower boundary of range the borrower's FICO belongs to."
 		},
 		"inqLast6Mths": {
 			"type": "less",

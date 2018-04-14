@@ -7,10 +7,27 @@ const DB_PORT = config.db_port;
 const DB_USER = config.db_user;
 const DB_PASS = config.db_password;
 
-
 module.exports = {
 	connect: function () {
 
+	},
+
+	getAllData: function () {
+		var url = `mongodb://${DB_USER}:${DB_PASS}@${DB_URL}:${DB_PORT}/loan_parser_notes`;
+		return new Promise((resolve, reject) => {
+			// Use connect method to connect to the Server 
+			MongoClient.connect(url, function(err, db) {
+				
+				var collection = db.collection('notes');
+
+				collection.find({}).toArray(function(err, docs) {
+					docs.length > 0 ? resolve(docs) : resolve([]);
+				});
+
+			  db.close();
+			});
+			
+		});
 	},
 
 	findNote: function (loanId) {

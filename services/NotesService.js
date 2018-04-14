@@ -21,18 +21,43 @@ module.exports = {
 	getNotes: function () {
 		return new Promise((resolve, reject) => {
 			console.log("start")
+			request({
+				method: "GET",
+				uri: "https://api.lendingclub.com/api/investor/v1/secondarymarket/listings",
+				headers: {
+					"Accept": "text/csv",
+					"Authorization": "0fw08C2fnWtjoXjmllBZ4SAKUUg=",
+					"X-LC-LISTING-VERSION": 1.3
+				}
+			})
+			.on("data", (data) => {
+				this.readStream(decoder.write(data))
+			})
+			.on('end', (a) => {
+			  	console.log("end");
+			  	resolve();
+			})
+
+
+
+			/*
 			request
-			  .get('https://resources.lendingclub.com/SecondaryMarketAllNotes.csv')
+			  .get('https://api.lendingclub.com/api/investor/v1/secondarymarket/listings', {
+			  	headers: {
+			  		"Accept": "text/csv"
+			  	}
+			  })
 			  .on('error', function(err) {
 			    console.log(err)
 			  })
 			  .on("data", (data) => {
 			  	this.readStream(decoder.write(data))
 			  })
-			  .on('end', () => {
+			  .on('end', (a) => {
 			  	console.log("end");
 			  	resolve();
 			  })
+		*/
 		});
 	},
 
@@ -42,6 +67,7 @@ module.exports = {
 
 	readStream: function (csvString) {
 		let reg = /\n$/;
+		//console.log(csvString)
 
 		/*
 			Sometimes the csv string ends in the middle of the string
@@ -66,32 +92,36 @@ module.exports = {
 			let obj = {
 			    LoanId: data[0],
 			    NoteId: data[1],
-			    OrderId: data[2],
-			    OutstandingPrincipal: data[3],
-			    AccruedInterest: data[4],
-			    Status: data[5],
-			    AskPrice: data[6],
-			    Markup_Discount: data[7],
-			    YTM: data[8],
-			    DaysSinceLastPayment: data[9],
-			    CreditScoreTrend: data[10],
-			    FICO_End_Range: data[11],
-			    Date_Time_Listed: data[12],
-			    NeverLate: data[13],
-			    Loan_Class: data[14],
-			    Loan_Maturity: data[15],
-			    Original_Note_Amount: data[16],
-			    Interest_Rate: data[17],
-			    Remaining_Payments: data[18],
-			    Principal_plus_Interest: data[19],
-			    Application_Type: data[20]
+			    outstandingPrincipal: data[2],
+			    accruedInterest: data[3],
+			    loanStatus: data[4],
+			    price: data[5],
+			    markupOrDiscount: data[6],
+			    yieldToMaturity: data[7],
+			    daysSinceLastPayment: data[8],
+			    creditScoreTrend: data[9],
+			    ficoEndRangeHigh: data[10],
+			    ficoEndRangeLow: data[11],
+			    listingStartDate: data[12],
+			    expirationDate: data[13],
+			    isNeverLate: data[14],
+			    subGrade: data[15],
+			    term: data[16],
+			    originalNoteAmount: data[17],
+			    interestRate: data[18],
+			    remainingPayments: data[19],
+			    applicationType: data[20],
 			}
 			this.runRules(obj);
 		});
 	},
 	runRules: function (obj) {
-		if (obj.Application_Type.toLowerCase() === "joint") {
-			if (parseInt(obj.Markup_Discount) < -5) { //todo: move this to rules json
+			if (parseFloat(obj.price) < 0.5) {
+				console.log(obj)
+				this.buy()
+			}
+			/*
+			if (parseInt(obj.markupOrDiscount) < -5) { //todo: move this to rules json
 				///todo: run a process after each rule to check if everything is true. This will speed up the program by not having to continue to run process for rule that wont pass.
 				let foo = rules.reduce((prev, item) => {
 					if (Array.isArray(item.value)) if (!this.processArray(item, obj)) prev = false;
@@ -99,8 +129,13 @@ module.exports = {
 					
 					return prev;
 				}, true);
-		
-			//console.log(obj);
+			
+			//	console.log(obj.AskPrice)
+				if (parseFloat(obj.price) < 0.5) {
+					console.log(obj)
+					//this.buy()
+				}
+
 				if (foo) {
 					//console.log(obj)
 					//only look for loans where the owner has a credit scroe of >700
@@ -111,7 +146,7 @@ module.exports = {
 					}
 				}
 			}
-		}
+			*/
 	},
 
 	processString: function (rule, obj) {
@@ -130,32 +165,28 @@ module.exports = {
 			return prev;
 		}, false);	
 	},
+
 	buy: function (data) {
-		let foo = {
-			"aid": parseInt(ACCOUNT_KEY),
-			"notes": [{
-				"loanId": parseInt(data.LoanId),
-				"orderId": parseInt(data.OrderId),
-				"noteId": parseInt(data.NoteId),
-				"bidPrice": parseFloat(data.AskPrice)
-			}]
-		} 
+		console.log("buying")
+		const buyJson = {
+			"noteId": "40940144",
+			"price": 0.5,
+			"orderType": "BUY",
+			"expirationDate": "2018-04-14"
+		}
 		
 		request({
-			url: `https://api.lendingclub.com/api/investor/v1/accounts/${ACCOUNT_KEY}/trades/buy/`,
+			url: `https://api.lendingclub.com/api/investor/v1/secondarymarket/accounts/${ACCOUNT_KEY}/orders`,
 			method: "POST",
 			headers: {
 				"Content-type": "application/json",
 				"Accept": "application/json",
 				"Authorization": API_KEY,
-				"X-LC-LISTING-VERSION": 1.1
+				"X-LC-LISTING-VERSION": 1.3
 			},
-			body: JSON.stringify(foo)
+			body: JSON.stringify(buyJson)
 		}, (err, resp, body) => {
-			console.log({
-				body: body,
-				err: err,
-			})
+	
 		})
 		
 		
@@ -181,7 +212,6 @@ module.exports = {
 	increaseCount: function (obj) {
 		mongoService.getData(obj.LoanId).then((data) => {
 			data.count++;
-			console.log(data.LoanId)
 			mongoService.updateNote(data, data.LoanId);
 		})
 	},

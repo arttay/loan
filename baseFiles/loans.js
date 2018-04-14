@@ -31,7 +31,7 @@ function getOps () {
 			"Content-type": "application/json",
 			"Accept": "application/json",
 			"Authorization": API_KEY,
-			"X-LC-LISTING-VERSION": 1.1
+			"X-LC-LISTING-VERSION": 1.3
 		}
 	}
 }

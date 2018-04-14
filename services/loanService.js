@@ -46,109 +46,27 @@ module.exports = {
 					if (runRules(item, secondary[rule], rule)) rulesPassed++;
 				}
 
-				if (rulesPassed >= (numOfSecondRules - 2)) prev.push(item)
+				if (rulesPassed >= (numOfSecondRules - 2)) {
+					let json = {
+						id: item.id,
+						term: item.term,
+						grade: item.subGrade,
+						intRate: item.intRate,
+						expDefaultRate: item.expDefaultRate,
+						dti: item.dti,
+						annualInc: item.annualInc,
+						isIncV: item.isIncV,
+						revolUtil: item.revolUtil,
+						revolBalc: item.revolBal,
+						ficoRangeHigh: item.ficoRangeHigh
+					}
+					prev.push(json)
+				}
 
 				return prev;
 			}, []);
 
 			console.log(furtherFilteredLoans)
-
-			/*
-			arr.forEach((item, key, index) => {
-				let criticalHits = 0;
-				let criticalRules = 4;
-				let secondaryHits = 0;
-				let secondaryRules = 6;
-				
-
-
-				for (let rule in criticals) {
-					if (Array.isArray(criticals[rule])) {
-						criticals[rule].forEach((ruleItem) => { if (item[rule] === ruleItem) criticalHits += 1; })
-					} else {
-						if (criticals[rule].hasOwnProperty("values")) {
-							let dep = criticals[rule].dep;
-							let depValue = criticals[rule].depValue;
-							let depValues = criticals[rule].values
-
-							if (item[dep] === depValue) {
-								depValues.forEach(ruleItem => {
-									if (ruleItem === item[rule]) criticalHits += 1;
-								})
-							}
-						} else {
-							if (item[rule] ===  criticals[rule]) criticalHits += 1;
-						}
-					}
-				}
-
-				let criticalRulePercent = (criticalHits / criticalRules) * 100;
-
-				if (criticalRulePercent >= 75) {
-
-						for (var key in secondary) {
-							let type = secondary[key].type;
-							let value = secondary[key].value;
-
-							if (type === "less") {
-								if(item[key] < value) {
-									secondaryHits += 1;
-								}
-							} 
-							
-							if (type === "greater") {
-								if(item[key] > value) {
-									secondaryHits += 1;
-								}
-							} 
-							
-							if (type === "match") {
-								if (Array.isArray(value)) {
-									value.forEach((value) => {
-										if (item[key] === value) secondaryHits += 1;
-									});
-								} else {
-									if (item[key] === value) {
-										secondaryHits += 1;
-									}
-								}
-							}//end match if
-						}
-					//	console.log(secondaryHits)
-						//22 rules at the moment 
-						if (secondaryHits >= 20) {
-								/*
-								Stuff to still create rules for
-
-									bcOpenToBuy: 			Total open to buy on revolving bankcards.
-									mthsSinceLastRecord: 	The Number of months since the last public record.
-									mthsSinceRecentInq: 	Months since most recent inquiry.
-									totalBalExMort: 		Total credit balance excluding mortgage.
-									mthsSinceRecentBcDlq: 	Months since most recent bankcard delinquency.
-									totHiCredLim: 			Total high credit/credit limit
-									totCurBal: 				Total current balance of all accounts
-									avgCurBal: 				Average current balance of all accounts
-									numBcSats: 				Number of satisfactory bankcard accounts
-									numTl120dpd2m: 			Number of accounts currently 120 days past due (updated in past 2 months)
-									inqFi: 					Number of personal finance inquiries.
-									inqLast12m: 			Number of credit inquiries in past 12 months.
-								*
-							console.log(item)
-							mongoService.find(item.id).then((status) => {
-								if (!status) {
-									mongoService.insert(item.id)
-								}
-							})
-						}
-				}
-
-				if (key === len-1) {
-					//if its the last item in the array, resolve the promise, end it.
-					resolve();
-				}
-				
-			});
-			*/
 		})
 
 	}
