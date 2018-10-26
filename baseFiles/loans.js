@@ -98,9 +98,9 @@ function sendText (data) {
 	/*
 	request.post('https://textbelt.com/text', {
 	  form: {
-	    phone: '6122806094',
+	    phone: '',
 	    message: JSON.stringify(data),
-	    key: 'a739eff8bcb8656210acf2db22565c3341e941a8SgPlwxCrwItdIsgLcnlvbqYto',
+	    key: '',
 	  },
 	}, function(err, httpResponse, body) {
 	  if (err) {
