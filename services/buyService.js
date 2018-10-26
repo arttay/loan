@@ -26,9 +26,12 @@ module.exports = {
 		let url = `https://api.lendingclub.com/api/investor/v1/accounts/${config.accountKey}/orders`;
 
 		let postData = {
-			aid: 101402950,
-			loanId: loanId,
-			requestedAmount: 25
+			aid: config.accountKey,
+			orders: [{
+				loanId: loanId,
+				requestedAmount: 25
+			}]
+
 		}
 
 		let ops = {

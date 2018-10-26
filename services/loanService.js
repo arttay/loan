@@ -2,15 +2,19 @@
 const rules = require("../data/loanRules");
 const request = require('request');
 const mongoService = require("./MongoService");
+const buyService = require("./buyService");
+const config = require("../config")
+
+
 
 module.exports = {
 	getLoans: function (ops) {
 		return new Promise((resolve, reject) => {
 			request(ops, (err, resp, body) => {
 				if (body !== "" && body !== "Internal Server Error" && body !== "Too Many Requests") {
-					this.parseLoan(JSON.parse(body)).then(() => {
-						console.log("done")
-						resolve();
+					this.parseLoan(JSON.parse(body)).then((data) => {
+						
+						resolve(data);
 					});
 				
 				}
@@ -60,16 +64,45 @@ module.exports = {
 						revolBalc: item.revolBal,
 						ficoRangeHigh: item.ficoRangeHigh
 					}
-					prev.push(json)
+					prev.push(item)
+					
 				}
 
 				return prev;
 			}, []);
 
-			console.log(furtherFilteredLoans)
+			resolve(furtherFilteredLoans)
 		})
 
 	}
+}
+
+function checkOwnership (loanId) {
+
+	return new Promise((resolve, reject) => {
+		let url = `https://api.lendingclub.com/api/investor/v1/accounts/${config.accountKey}/notes`;
+		let ops = {
+			url: url,
+			method: "GET",
+			headers: {
+				"Content-type": "application/json",
+				"Accept": "application/json",
+				"Authorization": config.apiKey
+			}
+		}
+		return new Promise((resolve, reject) => {
+			request(ops, (err, resp, body) => {
+				const notes = JSON.parse(body).myNotes
+
+				const doOwnNote = notes.reduce((prev, item) => {
+					if (item.loanId === loanId) prev = true
+					return prev
+				}, false)
+				resolve(doOwnNote)
+			});
+		});
+	})
+
 }
 
 function runRules (item, rule, prop) {
