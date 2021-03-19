@@ -26,7 +26,7 @@ module.exports = {
 				uri: "https://api.lendingclub.com/api/investor/v1/secondarymarket/listings",
 				headers: {
 					"Accept": "text/csv",
-					"Authorization": "0fw08C2fnWtjoXjmllBZ4SAKUUg=",
+					"Authorization": "",
 					"X-LC-LISTING-VERSION": 1.3
 				}
 			})
